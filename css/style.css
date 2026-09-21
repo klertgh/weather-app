@@ -1,0 +1,235 @@
+html {
+    background-color: hsl(243, 96%, 9%);
+}
+body {
+    background-color: hsl(243, 96%, 9%);
+    font-family: "Manrope", sans-serif;
+    font-size: 18px;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 50px 120px;
+    
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.units__button {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+
+    background-color: hsl(243, 27%, 20%);
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: hsl(250, 6%, 84%);
+
+    display: flex;
+    gap: 10px;
+}
+
+.units__icon {
+    width: 20px;
+}
+
+.units__list {
+    display: none;
+}
+
+.main {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+
+    grid-template-areas: 
+    "title title"
+    "search search"
+    "today hourly"
+    "daily hourly";
+
+    gap: 20px;
+}
+
+.main__title {
+    grid-area: title;
+    padding-top: 80px;
+
+    font-family: "Raleway", sans-serif;
+    font-size: 60px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: white;
+    text-align: center;
+}
+
+.search {
+    grid-area: search;
+
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+.search__field {
+    position: relative;
+}
+
+.search__input {
+    padding-left: 50px;
+    min-width: 507px;
+    min-height: 48px;
+    border-radius: 10px;
+
+    background-color: hsl(243, 27%, 20%);
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: white;
+}
+.search__input::placeholder {
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: hsl(250, 6%, 84%);
+}
+
+.search__img {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.search__button {
+    border: none;
+    border-radius: 10px;
+    background-color: hsl(233, 67%, 56%);
+    padding: 12px 18px;
+
+    color: white;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+
+.today {
+    grid-area: today;
+}
+
+.today__card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-image: url("../assets/images/bg-today-large.svg");
+    background-repeat: no-repeat;
+    padding: 0 30px;
+
+    width: 800px;
+    min-height: 286px;
+}
+
+.today__info{
+    color: white;
+    letter-spacing: 1px;
+    line-height: 1.75;
+}
+
+.today__city, .today__country {
+    font-family: "Raleway", sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.today__weather {
+    display: inline-flex;
+    align-items: center;
+}
+
+.today__icon{
+    width: 120px;
+}
+
+.today__degrees {
+    color: white;
+    font-size: 100px;
+    font-weight: 700;
+}
+
+.today__list {
+    margin-top: 30px;
+    display: flex;
+    gap: 20px;
+}
+
+.today__item {
+    min-width: 185px;
+    min-height: 120px;
+
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: 1px solid hsl(243, 23%, 24%);
+    border-radius: 10px;
+    background-color: hsl(243, 27%, 20%);
+
+    letter-spacing: 0.9px;
+}
+
+.today__label, .daily__min {
+    color: hsl(250, 6%, 84%);
+}
+
+.today__value {
+    margin-top: auto;
+    color: white;
+    font-size: 25px;
+}
+
+.daily {
+    grid-area: daily;
+}
+
+.daily__title {
+    margin: 15px 0;
+    color: white;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+.daily__items {
+    display: flex;
+    gap: 16.6px;
+}
+.daily__item {
+    
+}
+.daily__button {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 100px;
+    min-height: 150px;
+    padding: 15px 10px;
+
+    border: 1px solid hsl(243, 23%, 24%);
+    border-radius: 10px;
+    background-color: hsl(243, 27%, 20%);
+}
+
+.daily__degrees {
+    margin-top: auto;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.daily__label, .daily__max {
+    color: white;
+}
+
+.hourly {
+    grid-area: hourly;
+}
+

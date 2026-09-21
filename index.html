@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
 
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./css/reset.css">
+  <link rel="stylesheet" href="./css/style.css">
   
   <title>Frontend Mentor | Weather app</title>
   
@@ -17,11 +28,15 @@
   <!-- доделать data-* -->
   <header> 
     <img src="./assets/images/logo.svg" alt="Логотип Weather Now">
+
     <div class="units">
+
       <button type="button" class="units__button">
+
         <img class="units__icon" src="./assets/images/icon-units.svg" alt="">
+
         <span class="units__title">Единицы измерения</span>
-        <span class="units__el">⌄</span>
+
       </button>
 
       <!-- доделать логику обращения к каждому элементу с data-* -->
@@ -29,7 +44,7 @@
           <li class="units__item"><button type="button">Переключиться на метрическую систему</button></li>
           <li class="units__category">Температура</li>
           <li class="units__item">
-            <button type="button">Цельсий (°C)</button>
+            <button type="button">KJNjbin  (°C)</button>
             <img src="./assets/images/icon-checkmark.svg" alt="">
           </li>
           <li class="units__item">
@@ -64,6 +79,7 @@
     <!-- подсказки городов -->
     <form class="search">
       <div class="search__field">
+        
         <img class="search__img" src="./assets/images/icon-search.svg" alt="">
         <input type="search" class="search__input" placeholder="Введите город...">
 
@@ -76,36 +92,41 @@
     <section class="today">
 
       <div class="today__card">
+
         <div class="today__info">
-          <h2 class="today__title"></h2>
-          <p class="today__day"></p>
+          <h2 class="today__title"><span class="today__city">Санкт-Петербург, </span><span class="today__country">Россия</span></h2>
+
+          <p class="today__day">Понедельник, 21 сентября, 2026</p>
         </div>
+
         <div class="today__weather">
-          <img src="" alt="" class="today__icon">
-          <p class="today__degrees"></p>
+          <img src="./assets/images/icon-sunny.webp" alt="" class="today__icon">
+
+          <p class="today__degrees">15°</p>
         </div>
+
       </div>
 
       <ul class="today__list">
 
         <li class="today__item">
           <p class="today__label">Ощущается как</p>
-          <p class="today__value" id="feels"></p>
+          <p class="today__value" id="feels">12°</p>
         </li>
 
         <li class="today__item">
           <p class="today__label">Влажность</p>
-          <p class="today__value" id="humidity"></p>
+          <p class="today__value" id="humidity">46%</p>
         </li>
         
         <li class="today__item">
           <p class="today__label">Ветер</p>
-          <p class="today__value" id="wind"></p>
+          <p class="today__value" id="wind">4 м/c</p>
         </li>
         
         <li class="today__item">
           <p class="today__label">Осадки</p>
-          <p class="today__value" id="precipitation"></p>
+          <p class="today__value" id="precipitation">0 мм</p>
         </li>
 
       </ul>
@@ -121,85 +142,86 @@
         <ul class="daily__items">
 
           <li class="daily__item">
+
             <button type="button" class="daily__button">
-              <span class="daily__label"></span>
+              <span class="daily__label">Пон</span>
               <img class="daily__icon" src="" alt="">
 
               <div class="daily__degrees">
-                <span class="daily__max"></span>
-                <span class="daily__min"></span>
+                <span class="daily__max">15</span>
+                <span class="daily__min">10</span>
               </div>
             </button>
           </li>
 
           <li class="daily__item">
             <button type="button" class="daily__button">
-              <span class="daily__label"></span>
+              <span class="daily__label">Вт</span>
               <img class="daily__icon" src="" alt="">
 
               <div class="daily__degrees">
-                <span class="daily__max"></span>
-                <span class="daily__min"></span>
+                <span class="daily__max">16</span>
+                <span class="daily__min">11</span>
               </div>
             </button>
           </li>
 
           <li class="daily__item">
             <button type="button" class="daily__button">
-              <span class="daily__label"></span>
+              <span class="daily__label">Ср</span>
               <img class="daily__icon" src="" alt="">
 
               <div class="daily__degrees">
-                <span class="daily__max"></span>
-                <span class="daily__min"></span>
+                <span class="daily__max">15</span>
+                <span class="daily__min">10</span>
               </div>
             </button>
           </li>
 
           <li class="daily__item">
             <button type="button" class="daily__button">
-              <span class="daily__label"></span>
+              <span class="daily__label">Чт</span>
               <img class="daily__icon" src="" alt="">
 
               <div class="daily__degrees">
-                <span class="daily__max"></span>
-                <span class="daily__min"></span>
+                <span class="daily__max">18</span>
+                <span class="daily__min">12</span>
               </div>
             </button>
           </li>
 
           <li class="daily__item">
             <button type="button" class="daily__button">
-              <span class="daily__label"></span>
+              <span class="daily__label">Пт</span>
               <img class="daily__icon" src="" alt="">
 
               <div class="daily__degrees">
-                <span class="daily__max"></span>
-                <span class="daily__min"></span>
+                <span class="daily__max">18</span>
+                <span class="daily__min">14</span>
               </div>
             </button>
           </li>
 
           <li class="daily__item">
             <button type="button" class="daily__button">
-              <span class="daily__label"></span>
+              <span class="daily__label">Сб</span>
               <img class="daily__icon" src="" alt="">
 
               <div class="daily__degrees">
-                <span class="daily__max"></span>
-                <span class="daily__min"></span>
+                <span class="daily__max">16</span>
+                <span class="daily__min">12</span>
               </div>
             </button>
           </li>
 
           <li class="daily__item">
             <button type="button" class="daily__button">
-              <span class="daily__label"></span>
+              <span class="daily__label">Вс</span>
               <img class="daily__icon" src="" alt="">
 
               <div class="daily__degrees">
-                <span class="daily__max"></span>
-                <span class="daily__min"></span>
+                <span class="daily__max">15</span>
+                <span class="daily__min">12</span>
               </div>
             </button>
           </li>
