@@ -7,56 +7,220 @@
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
   
   <title>Frontend Mentor | Weather app</title>
-
-  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+  
   <style>
     .attribution { font-size: 0.6875rem; text-align: center; }
     .attribution a { color: hsl(228, 45%, 44%); }
   </style>
 </head>
 <body>
+  <!-- доделать data-* -->
+  <header> 
+    <img src="./assets/images/logo.svg" alt="Логотип Weather Now">
+    <div class="units">
+      <button type="button" class="units__button">
+        <img class="units__icon" src="./assets/images/icon-units.svg" alt="">
+        <span class="units__title">Единицы измерения</span>
+        <span class="units__el">⌄</span>
+      </button>
 
-  Units
-
-  Switch to Imperial/Metric
-
-  Temperature
-
-  Celsius (°C)
-  Fahrenheit (°F)
-
-  Wind Speed
-
-  km/h
-  mph
-
-  Precipitation
-
-  Millimeters (mm)
-  Inches (in)
-
-  How's the sky looking today?
-
-  Search for a city, e.g., New York
-  Search
-
-  Feels like
-  <!-- Insert temperature here -->
-
-  Humidity
-  <!-- Insert humidity here -->
-
-  Wind
-  <!-- Insert wind here -->   
+      <!-- доделать логику обращения к каждому элементу с data-* -->
+        <ul class="units__list">
+          <li class="units__item"><button type="button">Переключиться на метрическую систему</button></li>
+          <li class="units__category">Температура</li>
+          <li class="units__item">
+            <button type="button">Цельсий (°C)</button>
+            <img src="./assets/images/icon-checkmark.svg" alt="">
+          </li>
+          <li class="units__item">
+            <button type="button">Фаренгейт (°F)</button>
+            <img src="./assets/images/icon-checkmark.svg" alt="">
+          </li>
+          <li class="units__category">Скорость ветра</li>
+          <li class="units__item">
+            <button type="button">км/ч</button>
+            <img src="./assets/images/icon-checkmark.svg" alt="">
+          </li>
+          <li class="units__item">
+            <button type="button">миль/ч</button>
+            <img src="./assets/images/icon-checkmark.svg" alt="">
+          </li>
+          <li class="units__category">Осадки</li>
+          <li class="units__item">
+            <button type="button">Миллиметры (мм)</button>
+            <img src="./assets/images/icon-checkmark.svg" alt="">
+          </li>
+          <li class="units__item">
+            <button type="button">Дюймы (in)</button>
+            <img src="./assets/images/icon-checkmark.svg" alt="">
+          </li>
+        </ul>
+    </div>
+  </header>
   
-  Precipitation
-  <!-- Insert precipitation here -->
+  <main class="main">
+    <h1 class="main__title">Что там с погодой?</h1>
 
-  Daily forecast
-  <!-- Insert daily forecast for the next 7 days here -->
+    <!-- подсказки городов -->
+    <form class="search">
+      <div class="search__field">
+        <img class="search__img" src="./assets/images/icon-search.svg" alt="">
+        <input type="search" class="search__input" placeholder="Введите город...">
 
-  Hourly forecast
-  <!-- Insert hourly forecast for the selected day here -->
+        <!-- подсказки городов реализовать с помощью js -->
+        <ul class="search__suggestions"></ul>
+      </div>
+      <button type="submit" class="search__button">Найти</button>
+    </form>
+
+    <section class="today">
+
+      <div class="today__card">
+        <div class="today__info">
+          <h2 class="today__title"></h2>
+          <p class="today__day"></p>
+        </div>
+        <div class="today__weather">
+          <img src="" alt="" class="today__icon">
+          <p class="today__degrees"></p>
+        </div>
+      </div>
+
+      <ul class="today__list">
+
+        <li class="today__item">
+          <p class="today__label">Ощущается как</p>
+          <p class="today__value" id="feels"></p>
+        </li>
+
+        <li class="today__item">
+          <p class="today__label">Влажность</p>
+          <p class="today__value" id="humidity"></p>
+        </li>
+        
+        <li class="today__item">
+          <p class="today__label">Ветер</p>
+          <p class="today__value" id="wind"></p>
+        </li>
+        
+        <li class="today__item">
+          <p class="today__label">Осадки</p>
+          <p class="today__value" id="precipitation"></p>
+        </li>
+
+      </ul>
+
+    </section>
+
+    <!-- будет прокрута на тел -->
+    <section class="daily">
+      <h3 class="daily__title">Ежедневный прогноз</h3>
+
+      <!-- оставила div для горизонтальной прокрутки на тел -->
+      <div class="daily__list">
+        <ul class="daily__items">
+
+          <li class="daily__item">
+            <button type="button" class="daily__button">
+              <span class="daily__label"></span>
+              <img class="daily__icon" src="" alt="">
+
+              <div class="daily__degrees">
+                <span class="daily__max"></span>
+                <span class="daily__min"></span>
+              </div>
+            </button>
+          </li>
+
+          <li class="daily__item">
+            <button type="button" class="daily__button">
+              <span class="daily__label"></span>
+              <img class="daily__icon" src="" alt="">
+
+              <div class="daily__degrees">
+                <span class="daily__max"></span>
+                <span class="daily__min"></span>
+              </div>
+            </button>
+          </li>
+
+          <li class="daily__item">
+            <button type="button" class="daily__button">
+              <span class="daily__label"></span>
+              <img class="daily__icon" src="" alt="">
+
+              <div class="daily__degrees">
+                <span class="daily__max"></span>
+                <span class="daily__min"></span>
+              </div>
+            </button>
+          </li>
+
+          <li class="daily__item">
+            <button type="button" class="daily__button">
+              <span class="daily__label"></span>
+              <img class="daily__icon" src="" alt="">
+
+              <div class="daily__degrees">
+                <span class="daily__max"></span>
+                <span class="daily__min"></span>
+              </div>
+            </button>
+          </li>
+
+          <li class="daily__item">
+            <button type="button" class="daily__button">
+              <span class="daily__label"></span>
+              <img class="daily__icon" src="" alt="">
+
+              <div class="daily__degrees">
+                <span class="daily__max"></span>
+                <span class="daily__min"></span>
+              </div>
+            </button>
+          </li>
+
+          <li class="daily__item">
+            <button type="button" class="daily__button">
+              <span class="daily__label"></span>
+              <img class="daily__icon" src="" alt="">
+
+              <div class="daily__degrees">
+                <span class="daily__max"></span>
+                <span class="daily__min"></span>
+              </div>
+            </button>
+          </li>
+
+          <li class="daily__item">
+            <button type="button" class="daily__button">
+              <span class="daily__label"></span>
+              <img class="daily__icon" src="" alt="">
+
+              <div class="daily__degrees">
+                <span class="daily__max"></span>
+                <span class="daily__min"></span>
+              </div>
+            </button>
+          </li>
+          
+        </ul>
+      </div>
+    </section>
+
+    <!-- li через js -->
+    <section class="hourly">
+      <h3 class="hourly__title">Почасовой прогноз</h3>
+
+      <!-- реализация li через js
+      начиная с нынешнего и до 00
+      пр нехватки места - прокрутка -->
+      <ul class="hourly__list">
+      </ul>
+
+    </section>
+
+  </main>
 
   <footer class="attribution">
     Challenge by <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>. 
