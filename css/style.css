@@ -17,6 +17,10 @@ header {
     align-items: center;
 }
 
+.units {
+    position: relative;
+}
+
 .units__button {
     border: none;
     border-radius: 10px;
@@ -37,6 +41,40 @@ header {
 
 .units__list {
     display: none;
+    position: absolute;
+    margin-top: 15px;
+    padding: 5px 10px 5px;
+    border: 1px solid hsl(243, 23%, 24%);
+    border-radius: 10px;
+    background-color: hsl(243, 27%, 20%);
+}
+
+.units__item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    margin: 5px 0 11px 0;
+}
+.units__item:hover {
+    background-color: hsl(243, 27%, 27%);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s;
+
+}
+.units__item--btn {
+    background-color: inherit;
+    text-align: left;
+    color: hsl(250, 6%, 84%);
+    font-weight: 500;
+    letter-spacing: 0.9px;
+}
+
+.units__category {
+    padding: 8px;
+    color: hsl(240, 6%, 70%);
+    letter-spacing: 0.9px;
+    border-top: 1px solid hsl(243, 27%, 27%);
 }
 
 .main {
@@ -49,12 +87,12 @@ header {
     "today hourly"
     "daily hourly";
 
-    gap: 20px;
+    gap: 30px;
 }
 
 .main__title {
     grid-area: title;
-    padding-top: 80px;
+    padding-top: 50px;
 
     font-family: "Raleway", sans-serif;
     font-size: 60px;
@@ -137,7 +175,7 @@ header {
 
 .today__city, .today__country {
     font-family: "Raleway", sans-serif;
-    font-size: 25px;
+    font-size: 28px;
     font-weight: 700;
     letter-spacing: 1.5px;
 }
@@ -192,7 +230,7 @@ header {
 }
 
 .daily__title {
-    margin: 15px 0;
+    margin: 5px 0 15px 0;
     color: white;
     font-weight: 500;
     letter-spacing: 1px;
@@ -218,6 +256,11 @@ header {
     background-color: hsl(243, 27%, 20%);
 }
 
+.daily__button:hover {
+    background-color: hsl(243, 27%, 30%);
+    transition: 0.25s;
+}
+
 .daily__degrees {
     margin-top: auto;
 
@@ -229,7 +272,81 @@ header {
     color: white;
 }
 
+.daily__icon {
+    width: 70px;
+    margin: auto;
+}
+
 .hourly {
     grid-area: hourly;
+
+    min-width: 350px;
+    padding: 20px 0 20px 20px;
+    background-color: hsl(243, 27%, 20%);
+    border-radius: 20px;
+}
+
+.hourly__title {
+    padding: 0 20px 20px 0;
+    color: white;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+.hourly__list {
+    max-height: 576px;
+    overflow-y: auto;
+}
+
+.hourly__list::-webkit-scrollbar {
+    width: 7px;
+}
+.hourly__list::-webkit-scrollbar-track {
+    background-color: inherit;
+}
+.hourly__list::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: hsl(243, 23%, 30%);
+}
+.hourly__list::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(243, 23%, 40%)
+}
+
+.hourly__items {
+    padding-right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16.6px;
+}
+
+.hourly__item {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 5px 15px 5px 10px;
+
+    background-color: hsl(243, 27%, 27%);
+    border: 1px solid hsl(243, 27%, 32%);
+    border-radius: 10px;
+}
+
+.hourly__info {
+    display: inline-flex;
+    align-items: center;
+}
+
+.hourly__icon {
+    width: 50px;
+}
+
+.hourly__time {
+    padding-left: 10px;
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: white;
+}
+.hourly__degree {
+    color: white;
 }
 
