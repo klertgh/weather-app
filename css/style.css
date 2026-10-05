@@ -8,7 +8,6 @@ body {
     max-width: 1440px;
     margin: 0 auto;
     padding: 50px 120px;
-    
 }
 
 header {
@@ -42,6 +41,9 @@ header {
 .units__list {
     display: none;
     position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 10;
     margin-top: 15px;
     padding: 5px 10px 5px;
     border: 1px solid hsl(243, 23%, 24%);
@@ -79,7 +81,7 @@ header {
 
 .main {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
 
     grid-template-areas: 
     "title title"
@@ -159,11 +161,15 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-image: url("../assets/images/bg-today-large.svg");
-    background-repeat: no-repeat;
     padding: 0 30px;
 
-    width: 800px;
+    background-image: url("../assets/images/bg-today-large.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+
+    width: 100%;
     min-height: 286px;
 }
 
@@ -174,7 +180,6 @@ header {
 }
 
 .today__city, .today__country {
-    font-family: "Raleway", sans-serif;
     font-size: 28px;
     font-weight: 700;
     letter-spacing: 1.5px;
@@ -202,7 +207,8 @@ header {
 }
 
 .today__item {
-    min-width: 185px;
+    flex: 1;
+    min-width: 0;
     min-height: 120px;
 
     display: flex;
@@ -237,17 +243,19 @@ header {
 }
 
 .daily__items {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
     gap: 16.6px;
 }
 .daily__item {
-    
+    min-width: 0;
 }
 .daily__button {
     display: flex;
     flex-direction: column;
 
-    min-width: 100px;
+    width: 100%;
+    min-width: 0;
     min-height: 150px;
     padding: 15px 10px;
 
@@ -274,13 +282,16 @@ header {
 
 .daily__icon {
     width: 70px;
+    max-width: 100%;
     margin: auto;
 }
 
 .hourly {
     grid-area: hourly;
 
-    min-width: 350px;
+    min-width: 0;
+    width: 100%;
+
     padding: 20px 0 20px 20px;
     background-color: hsl(243, 27%, 20%);
     border-radius: 20px;
@@ -324,6 +335,7 @@ header {
     justify-content: space-between;
     align-items: center;
 
+    min-width: 0;
     padding: 5px 15px 5px 10px;
 
     background-color: hsl(243, 27%, 27%);
@@ -334,6 +346,7 @@ header {
 .hourly__info {
     display: inline-flex;
     align-items: center;
+    min-width: 0;
 }
 
 .hourly__icon {
@@ -350,3 +363,89 @@ header {
     color: white;
 }
 
+
+
+/* RESPONSIVE */
+
+@media (max-width: 1200px) {
+
+    body {
+        max-width: 375px;
+        padding: 25px 20px
+    }
+
+    .units__title {
+        display: none;
+    }
+    .units__list {
+        margin-top: 10px;
+        font-size: 15px;
+    }
+    .units__item {
+        padding: 5px;
+        margin: 3px 0px 8px;
+    }
+
+    .main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+
+    grid-template-areas: 
+    "title"
+    "search"
+    "today"
+    "daily"
+    "hourly";
+
+    gap: 25px;
+    }
+
+    .search {
+        flex-direction: column;
+        margin: 10px 0;
+    }
+    .search__input {
+        min-width: 330px;
+        min-height: 50px;
+    }
+    .search__button {
+        min-width: 330px;
+        min-height: 50px;
+    }
+
+    .today__card {
+        background-image: url("../assets/images/bg-today-small.svg");
+        flex-direction: column;
+        text-align: center;
+        padding: 25px 30px; 
+    }
+    .today__info {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .today__city, .today__country {
+        font-size: 21px;
+        line-height: 0.5px;
+    }
+    .today__day {
+        font-size: 15px;
+    }
+    .today__weather {
+        gap: 15px;
+    }
+
+    .today__list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 15px;
+    }
+
+    .daily__items {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+
+
+}
