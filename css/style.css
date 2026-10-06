@@ -51,6 +51,7 @@ header {
     background-color: hsl(243, 27%, 20%);
 }
 
+
 .units__item {
     display: flex;
     justify-content: space-between;
@@ -72,11 +73,22 @@ header {
     letter-spacing: 0.9px;
 }
 
+.units__item img{
+    display: none;
+}
+.units__item--selected img {
+    display: block;
+}
+
 .units__category {
     padding: 8px;
     color: hsl(240, 6%, 70%);
     letter-spacing: 0.9px;
     border-top: 1px solid hsl(243, 27%, 27%);
+}
+
+.units__list--open {
+    display: block;
 }
 
 .main {
@@ -434,13 +446,22 @@ header {
     .today__weather {
         gap: 15px;
     }
-
     .today__list {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 15px;
     }
 
+    .daily__list {
+        max-width: 335px;
+        overflow-y: hidden;
+    }
+    .daily__list::-webkit-scrollbar {
+        display: none;
+    }
+    .daily__items {
+        display: inline-flex;
+    }
     .daily__items {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 12px;

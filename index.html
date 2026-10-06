@@ -16,6 +16,7 @@
 
   <link rel="stylesheet" href="./css/reset.css">
   <link rel="stylesheet" href="./css/style.css">
+  <script type="module" src="./js/script.js" defer></script>
   
   <title>Погода</title>
   
@@ -25,7 +26,6 @@
   </style>
 </head>
 <body>
-  <!-- доделать data-* -->
   <header> 
     <img src="./assets/images/logo.svg" alt="Логотип Weather Now">
 
@@ -39,34 +39,33 @@
 
       </button>
 
-      <!-- доделать логику обращения к каждому элементу с data-* -->
         <ul class="units__list">
-          <li class="units__item"><button class="units__item--btn" type="button">Переключиться на&nbsp;метрическую систему</button></li>
+          <li class="units__item"><button class="units__item--btn" type="button" data-system="imperial">Переключиться на&nbsp;<span class="units__item--name">имперскую</span> систему</button></li>
           <li class="units__category">Температура</li>
           <li class="units__item">
-            <button class="units__item--btn" type="button">Цельсий (°C)</button>
+            <button class="units__item--btn" type="button" data-unit="temperature" data-value="celsius">Цельсий (°C)</button>
             <img src="./assets/images/icon-checkmark.svg" alt="">
           </li>
           <li class="units__item">
-            <button class="units__item--btn" type="button">Фаренгейт (°F)</button>
+            <button class="units__item--btn" type="button" data-unit="temperature" data-value="fahrenheit">Фаренгейт (°F)</button>
             <img src="./assets/images/icon-checkmark.svg" alt="">
           </li>
           <li class="units__category">Скорость ветра</li>
           <li class="units__item">
-            <button class="units__item--btn" type="button">км/ч</button>
+            <button class="units__item--btn" type="button" data-unit="wind" data-value="kmh">км/ч</button>
             <img src="./assets/images/icon-checkmark.svg" alt="">
           </li>
           <li class="units__item">
-            <button class="units__item--btn" type="button">миль/ч</button>
+            <button class="units__item--btn" type="button" data-unit="wind" data-value="mph">миль/ч</button>
             <img src="./assets/images/icon-checkmark.svg" alt="">
           </li>
           <li class="units__category">Осадки</li>
           <li class="units__item">
-            <button class="units__item--btn" type="button">Миллиметры (мм)</button>
+            <button class="units__item--btn" type="button" data-unit="rainfall" data-value="mm">Миллиметры (мм)</button>
             <img src="./assets/images/icon-checkmark.svg" alt="">
           </li>
           <li class="units__item">
-            <button class="units__item--btn" type="button">Дюймы (in)</button>
+            <button class="units__item--btn" type="button" data-unit="rainfall" data-value="inch">Дюймы (in)</button>
             <img src="./assets/images/icon-checkmark.svg" alt="">
           </li>
         </ul>
@@ -133,11 +132,9 @@
 
     </section>
 
-    <!-- будет прокрута на тел -->
     <section class="daily">
       <h3 class="daily__title">Ежедневный прогноз</h3>
 
-      <!-- оставила div для горизонтальной прокрутки на тел -->
       <div class="daily__list">
         <ul class="daily__items">
 
@@ -246,70 +243,7 @@
             </div>
             <sapn class="hourly__degree">15°</sapn>
           </li>
-          <li class="hourly__item">
-            <div class="hourly__info">
-              <img src="./assets/images/icon-rain.webp" alt="" class="hourly__icon">
-              <span class="hourly__time">15:00</span>
-            </div>
-            <span class="hourly__degree">15°</span>
-          </li>
-          <li class="hourly__item">
-            <div class="hourly__info">
-              <img src="./assets/images/icon-rain.webp" alt="" class="hourly__icon">
-              <span class="hourly__time">15:00</span>
-            </div>
-            <span class="hourly__degree">15°</span>
-          </li>
-          <li class="hourly__item">
-            <div class="hourly__info">
-              <img src="./assets/images/icon-rain.webp" alt="" class="hourly__icon">
-              <span class="hourly__time">15:00</span>
-            </div>
-            <span class="hourly__degree">15°</span>
-          </li>
-          <li class="hourly__item">
-            <div class="hourly__info">
-              <img src="./assets/images/icon-rain.webp" alt="" class="hourly__icon">
-              <span class="hourly__time">15:00</span>
-            </div>
-            <span class="hourly__degree">15°</span>
-          </li>
-          <li class="hourly__item">
-            <div class="hourly__info">
-              <img src="./assets/images/icon-rain.webp" alt="" class="hourly__icon">
-              <span class="hourly__time">15:00</span>
-            </div>
-            <span class="hourly__degree">15°</span>
-          </li>
-          <li class="hourly__item">
-            <div class="hourly__info">
-              <img src="./assets/images/icon-rain.webp" alt="" class="hourly__icon">
-              <span class="hourly__time">15:00</span>
-            </div>
-            <span class="hourly__degree">15°</span>
-          </li>
-          <li class="hourly__item">
-            <div class="hourly__info">
-              <img src="./assets/images/icon-rain.webp" alt="" class="hourly__icon">
-              <span class="hourly__time">15:00</span>
-            </div>
-            <span class="hourly__degree">15°</span>
-          </li>
-          <li class="hourly__item">
-            <div class="hourly__info">
-              <img src="./assets/images/icon-rain.webp" alt="" class="hourly__icon">
-              <span class="hourly__time">15:00</span>
-            </div>
-            <span class="hourly__degree">15°</span>
-          </li>
-          <li class="hourly__item">
-            <div class="hourly__info">
-              <img src="./assets/images/icon-rain.webp" alt="" class="hourly__icon">
-              <span class="hourly__time">15:00</span>
-            </div>
-            <span class="hourly__degree">15°</span>
-          </li>
-        </ul>
+          </ul>
       </div>
 
     </section>
