@@ -15,8 +15,49 @@ const currentWind = document.querySelector('#wind')
 const currentPrecipitation = document.querySelector('#precipitation')
 
 const dailyItems = document.querySelectorAll(".daily__item")
-const hourlyItems = document.querySelectorAll(".hourly__item")
+const hourlyItems = document.querySelector(".hourly__items")
 
+const weatherIcons = {
+    sunny: {
+        codes: [0, 1],
+        src: "./assets/images/icon-sunny.webp"
+    },
+
+    partlyCloudy: {
+        codes: [2],
+        src: "./assets/images/icon-partly-cloudy.webp"
+    },
+
+    overcast: {
+        codes: [3],
+        src: "./assets/images/icon-overcast.webp"
+    },
+
+    fog: {
+        codes: [45, 48],
+        src: "./assets/images/icon-fog.webp"
+    },
+
+    drizzle: {
+        codes: [51, 53, 55, 56, 57],
+        src: "./assets/images/icon-drizzle.webp"
+    },
+
+    rain: {
+        codes: [61, 63, 65, 66, 67, 80, 81, 82],
+        src: "./assets/images/icon-rain.webp"
+    },
+
+    snow: {
+        codes: [71, 73, 75, 77, 85, 86],
+        src: "./assets/images/icon-snow.webp"
+    },
+
+    storm: {
+        codes: [95, 96, 97, 99],
+        src: "./assets/images/icon-storm.webp"
+    }
+}
 
 
 function updateSelectedUnits() {
@@ -66,7 +107,6 @@ unitsList.addEventListener("click", function(event){
     }
     
     updateSelectedUnits()
-
 })
 
 function renderCurrentWeather(data) {
@@ -88,17 +128,45 @@ function renderDailyWeather(data) {
     })
 }
 
-function renderHourly(data) {
-    hourlyItems.forEach(function(item, index) {
-        const hourlyIcon = item.querySelector(".hourly__icon")
-        const hourlyTime = item.querySelector(".hourly__time")
-        const hourlyTemp = item.querySelector(".hourly__degree")
-
-        hourlyTime.textContent = data.hourly.time[index].slice(11, 16)
-        hourlyTemp.textContent = `${Math.round(data.hourly.temperature_2m[index])}°`
-    })
-    
+function getWeatherIcone(code) {
+    for (const group of Object.values(weatherIcons)) {
+        if (group.codes.includes(code)) {
+            return group.src
+        }
+    }
 }
+
+function renderHourly(data) {
+    const currentHour = data.current.time.slice(0, 14)+"00"
+    const indStartHour = data.hourly.time.indexOf(currentHour)
+    const indEndHour = indStartHour + 24
+    
+    for (let i=indStartHour; i<=indEndHour; i++) {
+        const li = document.createElement("li")
+        const div = document.createElement("div")
+        const img = document.createElement("img")
+        const spanTime = document.createElement("span")
+        const spanDegree = document.createElement("span")
+
+        const codeIcon = data.hourly.weather_code[i]
+
+        li.classList.add("hourly__item")
+        div.classList.add("hourly__info")
+        img.classList.add("hourly__icon")
+        spanTime.classList.add("hourly__time")
+        spanDegree.classList.add("hourly__degree")
+
+        img.setAttribute("src", getWeatherIcone(codeIcon))
+        spanTime.textContent = data.hourly.time[i].slice(11, 14)+"00"
+        spanDegree.textContent = Math.round(data.hourly.temperature_2m[i])
+
+        div.append(img, spanTime)
+        li.append(div, spanDegree)
+
+        hourlyItems.append(li)
+    }   
+}
+
 
 async function init() {
     const weatherData = await getWeather(
