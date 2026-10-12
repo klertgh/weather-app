@@ -1,4 +1,5 @@
 import { getWeather } from "./api.js"
+import { getLocation } from "./api.js"
 
 const unitsBtn = document.querySelector(".units__button")
 const unitsList = document.querySelector(".units__list")
@@ -7,14 +8,22 @@ const unitBtns = unitsList.querySelectorAll("[data-unit][data-value]")
 let isUnitsOpen = false
 const units = {temperature: "celsius", wind: "kmh", rainfall: "mm"}
 
+const searchForm = document.querySelector(".search")
+const searchInput = document.querySelector(".search__input")
+const searchSuggestions = document.querySelector(".search__suggestions")
+let isSearchSuggestions = false
+
+const currentCity = document.querySelector(".today__city")
+const currentCountry = document.querySelector(".today__country")
+const currentDay = document.querySelector(".today__day")
 const currentIcon = document.querySelector(".today__icon")
-const currentTemp = document.querySelector(".today__degrees")
+const currentDegree = document.querySelector(".today__degrees")
 const currentApparentTemp = document.querySelector("#feels")
 const currentHumidity = document.querySelector('#humidity')
 const currentWind = document.querySelector('#wind')
 const currentPrecipitation = document.querySelector('#precipitation')
 
-const dailyItems = document.querySelectorAll(".daily__item")
+const dailyItems = document.querySelector(".daily__items")
 const hourlyItems = document.querySelector(".hourly__items")
 
 const weatherIcons = {
@@ -59,6 +68,13 @@ const weatherIcons = {
     }
 }
 
+function getWeatherIcone(code) {
+    for (const group of Object.values(weatherIcons)) {
+        if (group.codes.includes(code)) {
+            return group.src
+        }
+    }
+}
 
 function updateSelectedUnits() {
     unitBtns.forEach(function(unitBtn) {
@@ -68,6 +84,33 @@ function updateSelectedUnits() {
         const isSelected = units[unit] === value
         unitBtn.parentElement.classList.toggle("units__item--selected", isSelected)
     })
+}
+
+searchInput.addEventListener("input", async function(event) {
+    const valueSearch = searchInput.value.trim()
+    if (valueSearch.length < 3) {
+        searchSuggestions.replaceChildren()
+        return
+    }
+    // исправить появление/исчезание подсказок
+    isSearchSuggestions = !isSearchSuggestions
+    searchSuggestions.classList.toggle("search__suggestions--open", isSearchSuggestions)
+    let suggestions = await getLocation(valueSearch)
+    renderSearchHint(suggestions)
+})
+
+function renderSearchHint(suggestions) {
+    searchSuggestions.replaceChildren()
+    suggestions.results.forEach(function(hintSearch) {
+        const li = document.createElement("li")
+        const button = document.createElement("button")
+        button.type = "button"
+        button.classList.add("search__hint-button")
+        button.textContent = hintSearch.name
+        li.append(button)
+        searchSuggestions.append(li)
+    })
+    
 }
 
 unitsBtn.addEventListener("click", function() {
@@ -109,35 +152,67 @@ unitsList.addEventListener("click", function(event){
     updateSelectedUnits()
 })
 
-function renderCurrentWeather(data) {
-    currentTemp.textContent = `${Math.round(data.current.temperature_2m)}°`
-    currentApparentTemp.textContent = `${Math.round(data.current.apparent_temperature)}°`
-    currentHumidity.textContent = `${data.current.relative_humidity_2m}%`
-    currentWind.textContent = `${data.current.wind_speed_10m} км/ч`
-    currentPrecipitation.textContent = `${data.current.precipitation} мм`
+searchForm.addEventListener("submit", async function(event) {
+    event.preventDefault()
+    const cityName = searchInput.value.trim()
+    await init(cityName)
+    
+})
+
+function renderCurrentWeather(wData, lData) {
+
+    const codeIcon = wData.current.weather_code
+    currentIcon.setAttribute("src", getWeatherIcone(codeIcon))
+    const day = new Date(wData.current.time).toLocaleDateString("ru-RU", {weekday: "long", day: "numeric", month: "short", year: "numeric"})
+    currentDay.textContent = day[0].toUpperCase() + day.replace("г.", "").slice(1)
+    
+    currentCity.textContent = `${lData.results[0].name}, `
+    currentCountry.textContent = lData.results[0].country
+    currentDegree.textContent = `${Math.round(wData.current.temperature_2m)}°`
+    currentApparentTemp.textContent = `${Math.round(wData.current.apparent_temperature)}°`
+    currentHumidity.textContent = `${wData.current.relative_humidity_2m}%`
+    currentWind.textContent = `${Math.round(wData.current.wind_speed_10m)} км/ч`
+    currentPrecipitation.textContent = `${wData.current.precipitation} мм`
 }
 
 function renderDailyWeather(data) {
-    dailyItems.forEach(function(item, index) {
-        const dailyIcon = item.querySelector(".daily__icon")
-        const dailyMax = item.querySelector(".daily__max")
-        const dailyMin = item.querySelector(".daily__min")
-        
-        dailyMax.textContent = `${Math.round(data.daily.temperature_2m_max[index])}°`
-        dailyMin.textContent = `${Math.round(data.daily.temperature_2m_min[index])}°`
+    dailyItems.replaceChildren()
+    data.daily.time.forEach(function(date, index) {
+        const codeIcon = data.daily.weather_code[index]
+
+        const li = document.createElement("li")
+        const button = document.createElement("button")
+        const spanLabel = document.createElement("span")
+        const img = document.createElement("img")
+        const div = document.createElement("div")
+        const spanMax = document.createElement("span")
+        const spanMin = document.createElement("span")
+
+        li.classList.add("daily__item")
+        button.classList.add("daily__button")
+        spanLabel.classList.add("daily__label")
+        img.classList.add("daily__icon")
+        div.classList.add("daily__degrees")
+        spanMax.classList.add("daily__max")
+        spanMin.classList.add("daily__min")
+        button.type = "button"
+        img.setAttribute("src", getWeatherIcone(codeIcon))
+
+        spanLabel.textContent = new Date(date).toLocaleDateString("ru-RU", {weekday: "short"})
+        spanMax.textContent = `${Math.round(data.daily.temperature_2m_max[index])}°`
+        spanMin.textContent = `${Math.round(data.daily.temperature_2m_min[index])}°`
+
+        div.append(spanMax, spanMin)
+        button.append(spanLabel, img, div)
+        li.append(button)
+        dailyItems.append(li)
     })
 }
 
-function getWeatherIcone(code) {
-    for (const group of Object.values(weatherIcons)) {
-        if (group.codes.includes(code)) {
-            return group.src
-        }
-    }
-}
-
 function renderHourly(data) {
-    const currentHour = data.current.time.slice(0, 14)+"00"
+    hourlyItems.replaceChildren()
+    
+    const currentHour = `${data.current.time.slice(0, 14)}00`
     const indStartHour = data.hourly.time.indexOf(currentHour)
     const indEndHour = indStartHour + 24
     
@@ -157,8 +232,8 @@ function renderHourly(data) {
         spanDegree.classList.add("hourly__degree")
 
         img.setAttribute("src", getWeatherIcone(codeIcon))
-        spanTime.textContent = data.hourly.time[i].slice(11, 14)+"00"
-        spanDegree.textContent = Math.round(data.hourly.temperature_2m[i])
+        spanTime.textContent = `${data.hourly.time[i].slice(11, 14)}00`
+        spanDegree.textContent = `${Math.round(data.hourly.temperature_2m[i])}°`
 
         div.append(img, spanTime)
         li.append(div, spanDegree)
@@ -167,17 +242,19 @@ function renderHourly(data) {
     }   
 }
 
-
-async function init() {
+async function init(name) {
+    const locationData = await getLocation(name)
     const weatherData = await getWeather(
-        52.52,
-        13.41,
+        locationData.results[0].latitude,
+        locationData.results[0].longitude,
         units
     )
-    renderCurrentWeather(weatherData)
+    renderCurrentWeather(weatherData, locationData)
     renderDailyWeather(weatherData)
     renderHourly(weatherData)
 
+
+    
+
 }
 
-init()

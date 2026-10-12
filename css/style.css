@@ -8,6 +8,7 @@ body {
     max-width: 1440px;
     margin: 0 auto;
     padding: 50px 120px;
+    cursor: default;
 }
 
 header {
@@ -134,7 +135,6 @@ header {
     min-width: 507px;
     min-height: 48px;
     border-radius: 10px;
-
     background-color: hsl(243, 27%, 20%);
     font-weight: 400;
     letter-spacing: 1px;
@@ -164,6 +164,38 @@ header {
     letter-spacing: 1px;
 }
 
+.search__suggestions {
+    display: none;
+    position: absolute;
+    padding: 5px;
+    margin-top: 8px;
+    min-width: 507px;
+    border-radius: 10px;
+    background-color: hsl(243, 27%, 20%);
+}
+
+.search__suggestions--open {
+    display: block;
+}
+
+.search__hint-button {
+    width: 100%;
+    padding: 10px;
+    color: white;
+    text-align: left;
+    font-weight: 200;
+    letter-spacing: 0.8px;
+    background-color: hsl(243, 27%, 20%);
+    border: 1px solid hsl(243, 27%, 20%);
+    border-radius: 10px;
+}
+
+.search__hint-button:hover {
+    background-color: hsl(243, 27%, 30%);
+    border: 1px solid hsl(243, 27%, 35%);
+    transition: 0.25s;
+    cursor: pointer;
+}
 
 .today {
     grid-area: today;
@@ -254,9 +286,20 @@ header {
     letter-spacing: 1px;
 }
 
+.daily__list {
+    max-width: 780px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.daily__list::-webkit-scrollbar {
+    display: none;
+}
+
 .daily__items {
     display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-auto-flow: column;
+    grid-auto-columns: 95px;
     gap: 16.6px;
 }
 .daily__item {
@@ -424,6 +467,9 @@ header {
         min-width: 330px;
         min-height: 50px;
     }
+    .search__suggestions {
+    min-width: 330px;
+    }
 
     .today__card {
         background-image: url("../assets/images/bg-today-small.svg");
@@ -454,19 +500,12 @@ header {
 
     .daily__list {
         max-width: 335px;
-        overflow-y: hidden;
-    }
-    .daily__list::-webkit-scrollbar {
-        display: none;
     }
     .daily__items {
-        display: inline-flex;
-    }
-    .daily__items {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        display: flex;
         gap: 12px;
     }
-
-
-
+    .daily__item {
+    flex: 0 0 85px;
+    }
 }
