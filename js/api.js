@@ -4,7 +4,7 @@ export async function getWeather(latitude, longitude, units) {
         latitude: latitude,
         longitude: longitude,
         current: "temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,precipitation,weather_code",
-        daily: "weather_code,temperature_2m_max,temperature_2m_min",
+        daily: "weather_code,temperature_2m_max,temperature_2m_min,temperature_2m_mean,apparent_temperature_mean,relative_humidity_2m_mean,wind_speed_10m_mean,precipitation_sum",
         hourly: "weather_code,temperature_2m",
         forecast_days: 10,
         timezone: "auto",

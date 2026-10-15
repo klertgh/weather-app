@@ -1,6 +1,8 @@
 import { getWeather } from "./api.js"
 import { getLocation } from "./api.js"
 
+let weatherData = null
+
 const unitsBtn = document.querySelector(".units__button")
 const unitsList = document.querySelector(".units__list")
 const unitName = document.querySelector(".units__item--name")
@@ -86,32 +88,53 @@ function updateSelectedUnits() {
     })
 }
 
+function renderSearchHint(suggestions) {
+    searchSuggestions.replaceChildren()
+    if (!suggestions?.results) return;
+    suggestions.results.forEach(function(hintSearch) {
+        const li = document.createElement("li")
+        const button = document.createElement("button")
+        button.dataset.latitude = hintSearch.latitude
+        button.dataset.longitude = hintSearch.longitude
+        button.dataset.name = hintSearch.name;
+        button.dataset.country = hintSearch.country;
+        button.type = "button"
+        button.classList.add("search__hint-button")
+        button.textContent = `${hintSearch.name}, ${hintSearch.admin1}, ${hintSearch.country}`
+        li.append(button)
+        searchSuggestions.append(li)
+    })
+    
+}
+
 searchInput.addEventListener("input", async function(event) {
     const valueSearch = searchInput.value.trim()
     if (valueSearch.length < 3) {
         searchSuggestions.replaceChildren()
         return
     }
-    // исправить появление/исчезание подсказок
-    isSearchSuggestions = !isSearchSuggestions
-    searchSuggestions.classList.toggle("search__suggestions--open", isSearchSuggestions)
+    searchSuggestions.classList.toggle("search__suggestions--open", true)
     let suggestions = await getLocation(valueSearch)
     renderSearchHint(suggestions)
+    console.log(suggestions)
 })
 
-function renderSearchHint(suggestions) {
-    searchSuggestions.replaceChildren()
-    suggestions.results.forEach(function(hintSearch) {
-        const li = document.createElement("li")
-        const button = document.createElement("button")
-        button.type = "button"
-        button.classList.add("search__hint-button")
-        button.textContent = hintSearch.name
-        li.append(button)
-        searchSuggestions.append(li)
-    })
-    
-}
+searchSuggestions.addEventListener("click", function(event) {
+    const buttonCity = event.target.closest(".search__hint-button");
+    if (!buttonCity) return;
+
+    const city = {name: buttonCity.dataset.name,
+        country: buttonCity.dataset.country,
+        latitude: +buttonCity.dataset.latitude,
+        longitude: +buttonCity.dataset.longitude
+    }
+
+    searchInput.value = ""
+    searchSuggestions.classList.remove("search__suggestions--open");
+
+    init(city)
+})
+
 
 unitsBtn.addEventListener("click", function() {
     isUnitsOpen = !isUnitsOpen
@@ -152,22 +175,23 @@ unitsList.addEventListener("click", function(event){
     updateSelectedUnits()
 })
 
-searchForm.addEventListener("submit", async function(event) {
+// ИСПРАВИТЬ ВЫЗОВ init
+searchForm.addEventListener("submit", function(event) {
     event.preventDefault()
     const cityName = searchInput.value.trim()
-    await init(cityName)
+    init(cityName)
     
 })
 
-function renderCurrentWeather(wData, lData) {
+function renderCurrentWeather(wData, city) {
 
     const codeIcon = wData.current.weather_code
     currentIcon.setAttribute("src", getWeatherIcone(codeIcon))
     const day = new Date(wData.current.time).toLocaleDateString("ru-RU", {weekday: "long", day: "numeric", month: "short", year: "numeric"})
     currentDay.textContent = day[0].toUpperCase() + day.replace("г.", "").slice(1)
     
-    currentCity.textContent = `${lData.results[0].name}, `
-    currentCountry.textContent = lData.results[0].country
+    currentCity.textContent = `${city.name}, `
+    currentCountry.textContent = city.country
     currentDegree.textContent = `${Math.round(wData.current.temperature_2m)}°`
     currentApparentTemp.textContent = `${Math.round(wData.current.apparent_temperature)}°`
     currentHumidity.textContent = `${wData.current.relative_humidity_2m}%`
@@ -189,6 +213,9 @@ function renderDailyWeather(data) {
         const spanMin = document.createElement("span")
 
         li.classList.add("daily__item")
+
+        li.dataset.date = date
+
         button.classList.add("daily__button")
         spanLabel.classList.add("daily__label")
         img.classList.add("daily__icon")
@@ -208,6 +235,33 @@ function renderDailyWeather(data) {
         dailyItems.append(li)
     })
 }
+
+//беру день недели из ежедневного списка
+dailyItems.addEventListener("click", function(event) {
+    const dayItem = event.target.closest(".daily__item");
+    if (!dayItem) return;
+
+    const date = dayItem.dataset.date;
+    renderSelectedDay(weatherData, date)
+})
+
+function renderSelectedDay(data, date) {
+    const index = weatherData.daily.time.indexOf(date)
+    if (index === -1) return
+
+    const codeIcon = data.daily.weather_code[index]
+    currentIcon.setAttribute("src", getWeatherIcone(codeIcon))
+    currentDegree.textContent = `${Math.round(data.daily.temperature_2m_mean[index])}°`
+    currentApparentTemp.textContent = `${Math.round(data.daily.apparent_temperature_mean[index])}°`
+    currentHumidity.textContent = `${data.daily.relative_humidity_2m_mean[index]}%`
+    currentWind.textContent = `${Math.round(data.daily.wind_speed_10m_mean[index])} км/ч`
+    currentPrecipitation.textContent = `${data.daily.precipitation_sum[index]} мм`
+
+    const day = new Date(date).toLocaleDateString("ru-RU", {weekday: "long", day: "numeric", month: "short", year: "numeric"})
+    currentDay.textContent = day[0].toUpperCase() + day.replace("г.", "").slice(1)
+
+}
+
 
 function renderHourly(data) {
     hourlyItems.replaceChildren()
@@ -242,19 +296,17 @@ function renderHourly(data) {
     }   
 }
 
-async function init(name) {
-    const locationData = await getLocation(name)
-    const weatherData = await getWeather(
-        locationData.results[0].latitude,
-        locationData.results[0].longitude,
-        units
+async function init(city) {
+    weatherData = await getWeather(city.latitude,city.longitude, units
     )
-    renderCurrentWeather(weatherData, locationData)
+    renderCurrentWeather(weatherData, city)
     renderDailyWeather(weatherData)
     renderHourly(weatherData)
-
-
     
+    
+    console.log(city)
+    console.log(weatherData)
 
 }
+
 
