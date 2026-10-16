@@ -8,12 +8,11 @@ const unitsList = document.querySelector(".units__list")
 const unitName = document.querySelector(".units__item--name")
 const unitBtns = unitsList.querySelectorAll("[data-unit][data-value]")
 let isUnitsOpen = false
-const units = {temperature: "celsius", wind: "kmh", rainfall: "mm"}
+const units = {temperature: "celsius", wind: "ms", rainfall: "mm"}
 
 const searchForm = document.querySelector(".search")
 const searchInput = document.querySelector(".search__input")
 const searchSuggestions = document.querySelector(".search__suggestions")
-let isSearchSuggestions = false
 
 const currentCity = document.querySelector(".today__city")
 const currentCountry = document.querySelector(".today__country")
@@ -69,7 +68,6 @@ const weatherIcons = {
         src: "./assets/images/icon-storm.webp"
     }
 }
-
 function getWeatherIcone(code) {
     for (const group of Object.values(weatherIcons)) {
         if (group.codes.includes(code)) {
@@ -78,63 +76,11 @@ function getWeatherIcone(code) {
     }
 }
 
-function updateSelectedUnits() {
-    unitBtns.forEach(function(unitBtn) {
-        const unit = unitBtn.dataset.unit
-        const value = unitBtn.dataset.value
-
-        const isSelected = units[unit] === value
-        unitBtn.parentElement.classList.toggle("units__item--selected", isSelected)
-    })
-}
-
-function renderSearchHint(suggestions) {
-    searchSuggestions.replaceChildren()
-    if (!suggestions?.results) return;
-    suggestions.results.forEach(function(hintSearch) {
-        const li = document.createElement("li")
-        const button = document.createElement("button")
-        button.dataset.latitude = hintSearch.latitude
-        button.dataset.longitude = hintSearch.longitude
-        button.dataset.name = hintSearch.name;
-        button.dataset.country = hintSearch.country;
-        button.type = "button"
-        button.classList.add("search__hint-button")
-        button.textContent = `${hintSearch.name}, ${hintSearch.admin1}, ${hintSearch.country}`
-        li.append(button)
-        searchSuggestions.append(li)
-    })
-    
-}
-
-searchInput.addEventListener("input", async function(event) {
-    const valueSearch = searchInput.value.trim()
-    if (valueSearch.length < 3) {
-        searchSuggestions.replaceChildren()
-        return
+document.addEventListener("click", function(event) {
+    if (!searchSuggestions.contains(event.target)) {
+        searchSuggestions.classList.remove("search__suggestions--open")
     }
-    searchSuggestions.classList.toggle("search__suggestions--open", true)
-    let suggestions = await getLocation(valueSearch)
-    renderSearchHint(suggestions)
-    console.log(suggestions)
 })
-
-searchSuggestions.addEventListener("click", function(event) {
-    const buttonCity = event.target.closest(".search__hint-button");
-    if (!buttonCity) return;
-
-    const city = {name: buttonCity.dataset.name,
-        country: buttonCity.dataset.country,
-        latitude: +buttonCity.dataset.latitude,
-        longitude: +buttonCity.dataset.longitude
-    }
-
-    searchInput.value = ""
-    searchSuggestions.classList.remove("search__suggestions--open");
-
-    init(city)
-})
-
 
 unitsBtn.addEventListener("click", function() {
     isUnitsOpen = !isUnitsOpen
@@ -164,7 +110,7 @@ unitsList.addEventListener("click", function(event){
         btn.dataset.system = "imperial"
 
         units.temperature = "celsius"
-        units.wind = "kmh"
+        units.wind = "ms"
         units.rainfall = "mm"
     }
 
@@ -175,28 +121,86 @@ unitsList.addEventListener("click", function(event){
     updateSelectedUnits()
 })
 
-// ИСПРАВИТЬ ВЫЗОВ init
-searchForm.addEventListener("submit", function(event) {
-    event.preventDefault()
-    const cityName = searchInput.value.trim()
-    init(cityName)
-    
+function updateSelectedUnits() {
+    unitBtns.forEach(function(unitBtn) {
+        const unit = unitBtn.dataset.unit
+        const value = unitBtn.dataset.value
+
+        const isSelected = units[unit] === value
+        unitBtn.parentElement.classList.toggle("units__item--selected", isSelected)
+    })
+}
+
+searchInput.addEventListener("input", async function(event) {
+
+    const valueSearch = searchInput.value.trim()
+    if (valueSearch.length < 3) {
+        searchSuggestions.replaceChildren()
+    } else {
+        const suggestions = await getLocation(valueSearch)
+        renderSearchHint(suggestions)
+    }
+    searchSuggestions.classList.toggle("search__suggestions--open", searchSuggestions.children.length > 0)
 })
 
-function renderCurrentWeather(wData, city) {
+function renderSearchHint(suggestions) {
+    searchSuggestions.replaceChildren()
+    if (!suggestions?.results) return;
+    suggestions.results.forEach(function(hintSearch) {
+        const li = document.createElement("li")
+        const button = document.createElement("button")
+        button.dataset.latitude = hintSearch.latitude
+        button.dataset.longitude = hintSearch.longitude
+        button.dataset.name = hintSearch.name;
+        button.dataset.country = hintSearch.country;
+        button.type = "button"
+        button.classList.add("search__hint-button")
+        button.textContent = `${hintSearch.name}, ${hintSearch.admin1}, ${hintSearch.country}`
+        li.append(button)
+        searchSuggestions.append(li)
+    })
+    
+}
 
-    const codeIcon = wData.current.weather_code
+searchSuggestions.addEventListener("click", function(event) {
+    const buttonCity = event.target.closest(".search__hint-button");
+    if (!buttonCity) return;
+
+    const city = {name: buttonCity.dataset.name,
+        country: buttonCity.dataset.country,
+        latitude: +buttonCity.dataset.latitude,
+        longitude: +buttonCity.dataset.longitude
+    }
+
+    searchInput.value = ""
+    searchSuggestions.classList.remove("search__suggestions--open");
+
+    init(city)
+})
+
+function renderCurrentWeather(data, date) {
+    const isDate = date != null
+    let index
+    if (isDate) {
+        index = data.daily.time.indexOf(date)
+    }
+
+    const degree = isDate ? data.daily.temperature_2m_mean[index] : data.current.temperature_2m
+    const apparentTemp = isDate ? data.daily.apparent_temperature_mean[index] : data.current.apparent_temperature
+    const humidity = isDate ? data.daily.relative_humidity_2m_mean[index] : data.current.relative_humidity_2m
+    const precipitation = isDate ? data.daily.precipitation_sum[index] : data.current.precipitation
+    const wind = isDate ? data.daily.wind_speed_10m_mean[index] : data.current.wind_speed_10m
+    const codeIcon = isDate ? data.daily.weather_code[index] : data.current.weather_code
     currentIcon.setAttribute("src", getWeatherIcone(codeIcon))
-    const day = new Date(wData.current.time).toLocaleDateString("ru-RU", {weekday: "long", day: "numeric", month: "short", year: "numeric"})
+
+    const day = isDate ? new Date(date).toLocaleDateString("ru-RU", {weekday: "long", day: "numeric", month: "short", year: "numeric"}) : new Date(data.current.time).toLocaleDateString("ru-RU", {weekday: "long", day: "numeric", month: "short", year: "numeric"})
     currentDay.textContent = day[0].toUpperCase() + day.replace("г.", "").slice(1)
     
-    currentCity.textContent = `${city.name}, `
-    currentCountry.textContent = city.country
-    currentDegree.textContent = `${Math.round(wData.current.temperature_2m)}°`
-    currentApparentTemp.textContent = `${Math.round(wData.current.apparent_temperature)}°`
-    currentHumidity.textContent = `${wData.current.relative_humidity_2m}%`
-    currentWind.textContent = `${Math.round(wData.current.wind_speed_10m)} км/ч`
-    currentPrecipitation.textContent = `${wData.current.precipitation} мм`
+    currentDegree.textContent = `${Math.round(degree)}°`
+    currentApparentTemp.textContent = `${Math.round(apparentTemp)}°`
+    currentHumidity.textContent = `${humidity}%`
+    currentWind.textContent = `${Math.round(wind)} м/c`
+    currentPrecipitation.textContent = `${Math.round(precipitation)} мм`
 }
 
 function renderDailyWeather(data) {
@@ -236,38 +240,28 @@ function renderDailyWeather(data) {
     })
 }
 
-//беру день недели из ежедневного списка
 dailyItems.addEventListener("click", function(event) {
     const dayItem = event.target.closest(".daily__item");
     if (!dayItem) return;
 
+    dailyItems.querySelectorAll(".daily__item").forEach(function(item) {
+        item.querySelector(".daily__button").classList.toggle("daily__button--selected", item === dayItem)
+    })
     const date = dayItem.dataset.date;
-    renderSelectedDay(weatherData, date)
+    renderCurrentWeather(weatherData, date)
+    renderHourly(weatherData, date)
 })
 
-function renderSelectedDay(data, date) {
-    const index = weatherData.daily.time.indexOf(date)
-    if (index === -1) return
 
-    const codeIcon = data.daily.weather_code[index]
-    currentIcon.setAttribute("src", getWeatherIcone(codeIcon))
-    currentDegree.textContent = `${Math.round(data.daily.temperature_2m_mean[index])}°`
-    currentApparentTemp.textContent = `${Math.round(data.daily.apparent_temperature_mean[index])}°`
-    currentHumidity.textContent = `${data.daily.relative_humidity_2m_mean[index]}%`
-    currentWind.textContent = `${Math.round(data.daily.wind_speed_10m_mean[index])} км/ч`
-    currentPrecipitation.textContent = `${data.daily.precipitation_sum[index]} мм`
-
-    const day = new Date(date).toLocaleDateString("ru-RU", {weekday: "long", day: "numeric", month: "short", year: "numeric"})
-    currentDay.textContent = day[0].toUpperCase() + day.replace("г.", "").slice(1)
-
-}
-
-
-function renderHourly(data) {
+function renderHourly(data, date) {
     hourlyItems.replaceChildren()
-    
-    const currentHour = `${data.current.time.slice(0, 14)}00`
-    const indStartHour = data.hourly.time.indexOf(currentHour)
+
+    let indStartHour
+    if (date == null) {
+        indStartHour = data.hourly.time.indexOf(`${data.current.time.slice(0, 14)}00`)
+    } else {
+        indStartHour = data.hourly.time.indexOf(`${date}T00:00`)
+    }
     const indEndHour = indStartHour + 24
     
     for (let i=indStartHour; i<=indEndHour; i++) {
@@ -291,7 +285,6 @@ function renderHourly(data) {
 
         div.append(img, spanTime)
         li.append(div, spanDegree)
-
         hourlyItems.append(li)
     }   
 }
@@ -299,10 +292,13 @@ function renderHourly(data) {
 async function init(city) {
     weatherData = await getWeather(city.latitude,city.longitude, units
     )
-    renderCurrentWeather(weatherData, city)
+
+    currentCity.textContent = `${city.name}, `
+    currentCountry.textContent = city.country
+
+    renderCurrentWeather(weatherData)
     renderDailyWeather(weatherData)
     renderHourly(weatherData)
-    
     
     console.log(city)
     console.log(weatherData)

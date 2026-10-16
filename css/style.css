@@ -132,7 +132,7 @@ header {
 
 .search__input {
     padding-left: 50px;
-    min-width: 507px;
+    min-width: 607px;
     min-height: 48px;
     border-radius: 10px;
     background-color: hsl(243, 27%, 20%);
@@ -305,6 +305,7 @@ header {
 .daily__item {
     min-width: 0;
 }
+
 .daily__button {
     display: flex;
     flex-direction: column;
@@ -322,6 +323,9 @@ header {
 .daily__button:hover {
     background-color: hsl(243, 27%, 30%);
     transition: 0.25s;
+}
+.daily__button--selected {
+    background-color: hsl(243, 27%, 30%);
 }
 
 .daily__degrees {
