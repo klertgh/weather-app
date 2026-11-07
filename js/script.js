@@ -321,7 +321,7 @@ function initUserLocation() {
 
             const city = {
                 name: location.city || location.locality,
-                country: location.country,
+                country: location.countryName,
                 latitude: latitude,
                 longitude: longitude
             }
