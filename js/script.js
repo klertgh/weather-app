@@ -1,5 +1,6 @@
 import { getWeather } from "./api.js"
 import { getLocation } from "./api.js"
+import { getCityByCoords } from "./api.js"
 
 let weatherData = null
 
@@ -290,19 +291,54 @@ function renderHourly(data, date) {
 }
 
 async function init(city) {
-    weatherData = await getWeather(city.latitude,city.longitude, units
-    )
+    try {
+        weatherData = await getWeather(city.latitude,city.longitude, units)
 
-    currentCity.textContent = `${city.name}, `
-    currentCountry.textContent = city.country
+        currentCity.textContent = `${city.name}, `
+        currentCountry.textContent = city.country
 
-    renderCurrentWeather(weatherData)
-    renderDailyWeather(weatherData)
-    renderHourly(weatherData)
-    
-    console.log(city)
-    console.log(weatherData)
+        renderCurrentWeather(weatherData)
+        renderDailyWeather(weatherData)
+        renderHourly(weatherData)
+        
+        console.log(city)
+        console.log(weatherData)
+    }
+    catch (error) {
+        console.error("Ошибка:", error)
+    }
 
 }
+
+function initUserLocation() {
+    navigator.geolocation.getCurrentPosition(
+    async function(position) {
+        try {
+            const latitude = position.coords.latitude
+            const longitude = position.coords.longitude
+
+            const location = await getCityByCoords(latitude, longitude)
+
+            const city = {
+                name: location.city || location.locality,
+                country: location.country,
+                latitude: latitude,
+                longitude: longitude
+            }
+            await init(city)
+        }
+        catch (error) {
+            console.log("Ошибка:", error)
+        }
+    },
+    function(error) {
+        console.log("Ошибка геолокации:", error.message)
+    }
+)
+}
+
+initUserLocation()
+
+
 
 
